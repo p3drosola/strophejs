@@ -103,9 +103,8 @@ if (!Array.prototype.indexOf)
  * on page reload, these references will still be available to callbacks
  * that are still executing.
  */
-
-(function (callback) {
 var Strophe;
+(function (exports) {
 
 /** Function: $build
  *  Create a Strophe.Builder.
@@ -2898,10 +2897,6 @@ Strophe.Connection.prototype = {
     }
 };
 
-if (callback) {
-    callback(Strophe, $build, $msg, $iq, $pres);
-}
-
 /** Class: Strophe.SASLMechanism
  *
  *  encapsulates SASL authentication mechanisms.
@@ -3264,10 +3259,19 @@ Strophe.SASLMD5.prototype.onChallenge = function(connection, challenge, test_cno
 
 Strophe.Connection.prototype.mechanisms[Strophe.SASLMD5.prototype.name] = Strophe.SASLMD5;
 
-})(function () {
-    window.Strophe = arguments[0];
-    window.$build = arguments[1];
-    window.$msg = arguments[2];
-    window.$iq = arguments[3];
-    window.$pres = arguments[4];
-});
+Strophe.$build = $build;
+Strophe.$msg = $msg;
+Strophe.$iq = $iq;
+Strophe.$pres = $pres;
+
+this.$build = $build;
+this.$msg = $msg;
+this.$iq = $iq;
+this.$pres = $pres;
+
+
+this.Strophe = Strophe;
+exports = Strophe;
+
+})(typeof exports === 'undefined'? this['Strophe'] = {} : exports);
+
